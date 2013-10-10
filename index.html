@@ -1,5 +1,30 @@
 <html>
 	<head>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="jquery.jp2-viewer.js"></script>
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+				var baseOpts = {
+					url: "https://github.com/renevanderark/jp2png-web-cgi/blob/master/balloon.jp2?raw=true",
+					workers: [
+						{ address: "http://openjpeg.kbresearch.nl/cgi-bin/jp2.cgi", cores: 1 }
+					],
+					primary: "http://openjpeg.kbresearch.nl/cgi-bin/jp2.cgi",
+					dataType: "jsonp"
+				};
+
+				$("canvas#big")
+					.jp2Viewer($.extend({miniMap: $("canvas#mini")}, baseOpts))
+					.jp2ViewerEvents();
+
+				$("canvas#mini")
+					.jp2Viewer($.extend({ initScale: "full-height", wrapImage: true }, baseOpts))
+					.jp2MinimapEvents({ viewer: $("canvas#big")});
+			});
+		</script>
+
 		<style type="text/css">
 			body { font-family: sans-serif;  }
 			body > div { padding-left: 250px; }
@@ -38,6 +63,12 @@
 				<a href="http://renevanderark.github.io/canvas-td">demo</a>)
 			</li>
 		</ul>
+			<canvas id="big" width="400" height="400" style="float: left; border: 1px solid">
+			</canvas>
+			<canvas id="mini" height="150" style="float: left; border: 1px solid">
+			</canvas>
 		</div>
+
+
 	</body>
 </html>

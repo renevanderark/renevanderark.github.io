@@ -2,9 +2,12 @@
 <html>
 	<head>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
-		<script type="text/javascript" src="jquery.mousewheel.js"></script>
-		<script type="text/javascript" src="jquery.jp2-viewer.js"></script>
 		<script type="text/javascript">
+			var language = "en";
+			if((window.navigator.userLanguage || window.navigator.language).match(/^nl/)) {
+				language = "nl";
+			}
+			alert(language);
 		</script>
 
 		<style type="text/css">
@@ -38,6 +41,9 @@
 			<li>Decoding jp2's using Openjpeg 2.0 (<a href="https://github.com/renevanderark/jp2png-web-cgi">source</a> | 
 				<a href="http://openjpeg.kbresearch.nl/jp2demo2/index.html?urn=ddd:010461485:mpeg21:p001:image">demo</a>)
 			</li>
+			<li>Postcorrecting OCR (<a href="https://github.com/KBNLresearch/alto-editor">source</a> | 
+				<a href="http://altoedit.kbresearch.nl/webapp/dpo:8218:mpeg21:0036/edit">demo</a>)
+			</li>	
 			<li>Tower defense! (<a href="https://github.com/renevanderark/canvas-td">source</a> | 
 				<a href="http://renevanderark.github.io/canvas-td">demo</a>)
 			</li>

@@ -3,11 +3,12 @@
 	<head>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript">
-			var language = "en";
-			if((window.navigator.userLanguage || window.navigator.language).match(/^nl/)) {
-				language = "nl";
+			var browserLang = window.navigator.userLanguage || window.navigator.language;
+			var lang = "en";
+			if(browserLang.match(/^nl/)) {
+				lang = "nl";
 			}
-			alert(language);
+			
 		</script>
 
 		<style type="text/css">

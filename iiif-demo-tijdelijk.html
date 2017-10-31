@@ -7,18 +7,29 @@
 			                integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
 		             crossorigin=""/>
 			        <style type="text/css">
-        html, body, .map{
-		          height: 600px;
-				            width: 1024px;
-						              margin: 0;
-								              }
+        html, body {
+					margin: 0;
+					}
+					h3, p {
+						padding: 0 10px 0 10px;
+					}
+					.map{
+		         	height: 600px;
+					 		width: calc(50% - 16px);
+							margin: 0;
+							margin-left: 10px;
+							float: left;
+							border: 1px solid #aaa
+					}
 
 	    </style>
 	        <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
 		             integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
 	                   crossorigin=""></script>
 		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		        <script src="https://cdn.rawgit.com/mejackreed/Leaflet-IIIF/v1.2.1/leaflet-iiif.js"></script>
+        <script src="https://cdn.rawgit.com/mejackreed/Leaflet-IIIF/v1.2.1/leaflet-iiif.js"></script>
+				<script src="jquery.mousewheel.js"></script>
+				<script src="jquery.imageviewerclient.js"></script>
 	</head>
 	<body>
 		<h3>
@@ -27,14 +38,33 @@
 		<p>
 			Dit is een tijdelijke demo. Mocht er geen afbeelding verschijnen hieronder, neem dan contact met me op via <a href="mailto:rene.vanderark@kb.nl">rene.vanderark@kb.nl</a>; mogelijk is de demo even offline en kan ik hem weer opstarten (controleer dan eerst of de afbeeldingen niet geblokkeerd worden door een browser plugin).
 		</p>
+		<p style="float: left; width: calc(50% - 20px)">Leaflet viewer (off the shelf IIIF viewer)</p>
+		<p style="float: left; width: calc(50% - 20px)">Delpher viewer</p>
 		<div id="map" class="map"></div>
+		<div id="delph" class="map">
+			<canvas></canvas>
+		</div>
+
 		<script type="text/javascript">
+
     var map = L.map('map', {
 	          center: [0, 0],
 		        crs: L.CRS.Simple,
 			      zoom: 0,
 			          });
     var urn = document.location.href.split("?urn=")[1];
+		$("#delph > canvas")
+			.attr("height",$("#delph").height())
+			.attr("width", $("#delph").width())
+			.imageViewerClient('http://imageviewer-iiif.kbresearch.nl/imagingService', {params: {id: urn}})
+			.imageViewerHandlers({mousewheel: true});
+
+		$(window).on("resize", function() {
+			$("#delph > canvas")
+				.attr("width", $("#delph").width())
+				.attr("height", $("#delph").height())
+				.trigger("recalibrate");
+		});
         if (urn) {
 		        L.tileLayer.iiif('http://imageviewer-iiif.kbresearch.nl/iiif-service/' + urn + '/info.json', {
 					            tileSize: 512
@@ -46,4 +76,3 @@
 		</script>
 	</body>
 </html>
-

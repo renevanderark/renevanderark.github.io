@@ -53,6 +53,7 @@
 			      zoom: 0,
 			          });
     var urn = document.location.href.split("?urn=")[1];
+		if (!urn) { urn = "ddd:010691737:mpeg21:p001:image"; }
 		$("#delph > canvas")
 			.attr("height",$("#delph").height())
 			.attr("width", $("#delph").width())
@@ -65,14 +66,9 @@
 				.attr("height", $("#delph").height())
 				.trigger("recalibrate");
 		});
-        if (urn) {
-		        L.tileLayer.iiif('http://imageviewer-iiif.kbresearch.nl/iiif-service/' + urn + '/info.json', {
-					            tileSize: 512
-						            }).addTo(map);
-			    } else {
-				            L.tileLayer.iiif('http://imageviewer-iiif.kbresearch.nl/iiif-service/ddd:010691737:mpeg21:p001:image/info.json', {
-							            }).addTo(map);
-					        }
+		L.tileLayer.iiif('http://imageviewer-iiif.kbresearch.nl/iiif-service/' + urn + '/info.json', {
+				tileSize: 512
+		}).addTo(map);
 		</script>
 	</body>
 </html>

@@ -57,7 +57,7 @@
 	          center: [0, 0],
 		        crs: L.CRS.Simple,
 			      zoom: 0,
-			          });
+    });
     var urn = document.location.href.split("?urn=")[1];
 		if (!urn) { urn = "ddd:010691737:mpeg21:p001:image"; }
 		$("#delph > canvas")
@@ -67,6 +67,7 @@
 				params: {id: urn},
 				initialZoom: "scaleToFullHeight",
 				minScale: 0.0001,
+				previewScale: urn.match("ddd") ? 0.2 : 0.5,
 				allowYCentering: true,
 				userCallback: function () {
 					// [factor, commit, center, scalingTo, options]

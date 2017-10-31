@@ -37,7 +37,12 @@
 			Tijdelijke demo
 		</h3>
 		<p>
-			Dit is een tijdelijke demo. Mocht er geen afbeelding verschijnen hieronder, neem dan contact met me op via <a href="mailto:rene.vanderark@kb.nl">rene.vanderark@kb.nl</a>; mogelijk is de demo even offline en kan ik hem weer opstarten (controleer dan eerst of de afbeeldingen niet geblokkeerd worden door een browser plugin).
+			Dit is een tijdelijke demo. Mocht er geen afbeelding verschijnen hieronder, neem dan contact met me op via <a href="mailto:rene.vanderark@kb.nl">rene.vanderark@kb.nl</a>; mogelijk is de demo even offline en kan ik hem weer opstarten (controleer dan eerst of de afbeeldingen niet geblokkeerd worden door een browser plugin).<br />
+			Voorbeelden:
+			<a href="?urn=ddd:010383707:mpeg21:p010:image">Kranten</a>
+			<a href="?urn=MMUBL07:000003762:00003:image">Boeken basis</a>
+			<a href="?urn=MMIISG02:000450011:00001:image">Tijdschriften</a>
+
 		</p>
 		<p style="float: left; width: calc(50% - 20px)">Leaflet viewer (off the shelf IIIF viewer)</p>
 		<p style="float: left; width: calc(50% - 20px)">Delpher viewer</p>
@@ -65,7 +70,11 @@
 				allowYCentering: true,
 				userCallback: function () {
 					// [factor, commit, center, scalingTo, options]
-					$("#delph > canvas").trigger("scaleBy",  [0.0625, true, null, true]);
+					if (urn.match("ddd")) {
+						$("#delph > canvas").trigger("scaleBy",  [0.0625, true, null, true]);
+					} else {
+						$("#delph > canvas").trigger("scaleBy",  [0.25, true, null, true]);
+					}
 
 				}
 			})

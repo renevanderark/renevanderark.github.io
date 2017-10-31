@@ -256,7 +256,7 @@ var imageviewerClientCurrentScaleFactor = 1.0;
 			if (spinner) {
 				spinner.show();
 			}
-			var src= serviceUrl + "?" + new Date().getTime() + "&" + $.param(previewParams);
+			var src= serviceUrl + "?" + $.param(previewParams);
 			previewImage = $("<img>")
 				//.error(onImageError)
 				.on("load", function () {
@@ -272,8 +272,7 @@ var imageviewerClientCurrentScaleFactor = 1.0;
 			canvasImage = $("<img>")
 //				.error(onImageError)
 				.on("load", function () { onCanvasImageLoad(this); });
-			canvasImage[0].src = serviceUrl + "?" +
-				new Date().getTime() + "&" + $.param(normalize(params));
+			canvasImage[0].src = serviceUrl + "?" + $.param(normalize(params));
 
 			if (opts.onpaint) {
 				opts.onpaint(normalize(params));

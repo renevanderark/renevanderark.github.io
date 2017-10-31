@@ -19,7 +19,8 @@
 							margin: 0;
 							margin-left: 10px;
 							float: left;
-							border: 1px solid #aaa
+							border: 1px solid #aaa;
+							background-color: #ddd;
 					}
 
 	    </style>
@@ -57,7 +58,17 @@
 		$("#delph > canvas")
 			.attr("height",$("#delph").height())
 			.attr("width", $("#delph").width())
-			.imageViewerClient('http://imageviewer-iiif.kbresearch.nl/imagingService', {params: {id: urn}})
+			.imageViewerClient('http://imageviewer-iiif.kbresearch.nl/imagingService', {
+				params: {id: urn},
+				initialZoom: "scaleToFullHeight",
+				minScale: 0.0001,
+				allowYCentering: true,
+				userCallback: function () {
+					// [factor, commit, center, scalingTo, options]
+					$("#delph > canvas").trigger("scaleBy",  [0.0625, true, null, true]);
+
+				}
+			})
 			.imageViewerHandlers({mousewheel: true});
 
 		$(window).on("resize", function() {
@@ -69,6 +80,7 @@
 		L.tileLayer.iiif('http://imageviewer-iiif.kbresearch.nl/iiif-service/' + urn + '/info.json', {
 				tileSize: 512
 		}).addTo(map);
+
 		</script>
 	</body>
 </html>

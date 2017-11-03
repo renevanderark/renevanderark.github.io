@@ -60,11 +60,12 @@
     });
     var urn = document.location.href.split("?urn=")[1];
 		if (!urn) { urn = "ddd:010691737:mpeg21:p001:image"; }
+
 		$("#delph > canvas")
 			.attr("height",$("#delph").height())
 			.attr("width", $("#delph").width())
 			.imageViewerClient('http://imageviewer-iiif.kbresearch.nl/imagingService', {
-				params: {id: urn},
+				params: {id: decodeURIComponent(urn)},
 				initialZoom: "scaleToFullHeight",
 				minScale: 0.0001,
 				previewScale: urn.match("ddd") ? 0.2 : 0.5,

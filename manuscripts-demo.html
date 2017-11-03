@@ -64,17 +64,13 @@
 			.attr("width", $("#delph").width())
 			.imageViewerClient('http://imageviewer-iiif.kbresearch.nl/imagingService', {
 				params: {id: decodeURIComponent(urn)},
-				initialZoom: "scaleToFullHeight",
+        initialZoom: $(window).width() > $(window).height() ? "scaleToFullHeight" : "scaleToFullWidth",
 				minScale: 0.0001,
 				previewScale: urn.match("ddd") ? 0.2 : 0.5,
 				allowYCentering: true,
 				userCallback: function () {
 					// [factor, commit, center, scalingTo, options]
-					if (urn.match("ddd")) {
-						$("#delph > canvas").trigger("scaleBy",  [0.0625, true, null, true]);
-					} else {
-						$("#delph > canvas").trigger("scaleBy",  [0.25, true, null, true]);
-					}
+
 
 				}
 			})
@@ -117,7 +113,11 @@
         });
     }
 
-    $("#thumbs").scrollLeft($("#thumbs > a[data-urn='" + urn + "']")[0].offsetLeft - parseInt($(window).width() * 0.45) );
+    if ( $(window).width() > $(window).height() ) {
+      $("#thumbs").scrollLeft($("#thumbs > a[data-urn='" + urn + "']")[0].offsetLeft - parseInt($(window).width() * 0.45) );
+    } else {
+      $("#thumbs").scrollLeft($("#thumbs > a[data-urn='" + urn + "']")[0].offsetLeft );
+    }
 
 
     var scrollSpeed = 0;

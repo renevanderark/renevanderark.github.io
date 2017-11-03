@@ -784,8 +784,10 @@ var imageviewerClientCurrentScaleFactor = 1.0;
 				var box = getBox();
 				storedPos = {x: e.clientX - box.x0, y: e.clientY - box.y0};
 			}
-		}).on("mousemove", function (e) {
-			if ($(this).hasClass("touchactive")) {
+		});
+
+		$(document).on("mousemove", function (e) {
+			if ($(_self).hasClass("touchactive")) {
 				e.preventDefault();
 				e.stopPropagation();
 				return false;
@@ -795,14 +797,16 @@ var imageviewerClientCurrentScaleFactor = 1.0;
 				box;
 			if (dragging) {
 				e.preventDefault();
-				$(this).trigger('moveBy', [movement, false]);
+				$(_self).trigger('moveBy', [movement, false]);
 			} else if (clipping && (movement.x !== 0 || movement.y !== 0)) {
 				box = getBox();
-				$(this).trigger('drawRect', [storedPos, {x: e.clientX - box.x0, y: e.clientY - box.y0}]);
+				$(_self).trigger('drawRect', [storedPos, {x: e.clientX - box.x0, y: e.clientY - box.y0}]);
 			}
 			lastCursorPos = {x: e.clientX, y: e.clientY};
-		}).on("mouseup", function (e) {
-			if ($(this).hasClass("touchactive")) {
+		});
+
+		$(document).on("mouseup", function (e) {
+			if ($(_self).hasClass("touchactive")) {
 				e.preventDefault();
 				e.stopPropagation();
 				return false;
@@ -811,32 +815,17 @@ var imageviewerClientCurrentScaleFactor = 1.0;
 			if (dragging) {
 				e.preventDefault();
 				movement = {x: e.clientX - lastCursorPos.x, y: e.clientY - lastCursorPos.y};
-				$(this).trigger('moveBy', [movement, true]);
+				$(_self).trigger('moveBy', [movement, true]);
 			} else if (clipping) {
 				box = getBox();
-				$(this).trigger('clip', [storedPos, {x: e.clientX - box.x0, y: e.clientY - box.y0}]);
+				$(_self).trigger('clip', [storedPos, {x: e.clientX - box.x0, y: e.clientY - box.y0}]);
 			}
-			$(this).removeClass("dragging-cursor");
+			$(_self).removeClass("dragging-cursor");
 			clipping = false;
 			dragging = false;
-		}).on("mouseout", function (e) {
-			if ($(this).hasClass("touchactive")) {
-				e.preventDefault();
-				e.stopPropagation();
-				return false;
-			}
-			var box = getBox(),
-				movement;
-			if (e.clientX < box.x0 || e.clientX > box.x1 || e.clientY < box.y0 || e.clientY > box.y1) {
-				e.preventDefault();
-				if (dragging) {
-					movement = {x: e.clientX - lastCursorPos.x, y: e.clientY - lastCursorPos.y};
-					$(this).trigger('moveBy', [movement, true]);
-					dragging = false;
-					$(this).removeClass("dragging-cursor");
-				}
-			}
-		}).on("click", function (e) {
+		})
+
+		$(this).on("click", function (e) {
 			if ($(this).hasClass("touchactive")) {
 				e.preventDefault();
 				e.stopPropagation();

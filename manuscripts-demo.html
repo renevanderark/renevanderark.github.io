@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		    <meta charset="utf-8">
+		        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+			    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+			                integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+		             crossorigin=""/>
+			        <style type="text/css">
+        html, body {
+					margin: 0;
+          font-family: sans-serif;
+					}
+					h3, p {
+						padding: 0 10px 0 10px;
+					}
+
+	    </style>
+		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+				<script src="jquery.mousewheel.js"></script>
+				<script src="jquery.imageviewerclient.js"></script>
+        <script src="manuscripts.js"></script>
+	</head>
+
+
+	<body>
+    <div style="position: absolute; left: 40px; top: 10px">
+      Scans uit digitalisering:
+      <a id="scans-a" style="text-decoration: none" href="?urn=file:///opt3/handschriften/jp2/20171026/KBHSS01000058925/access/424C19_01_01_8532.jp2">
+        KBHSS01000058925 (26 oktober 2017)
+      </a> | <a id="scans-b" style="text-decoration: none" href="?urn=file:///opt3/handschriften/jp2/20160517/KBHSS01000058055/access/424C1-02-02_0206.jp2">
+        KBHSS01000058055 (17 mei 2016)
+      </a>
+    </div>
+
+    <div id="delph" style="position: absolute; width: 100%; height: calc(100% - 180px); background-color: #282828; top: 40px">
+      <canvas></canvas>
+    </div>
+
+
+
+    <div id="thumb-scroll-left" style="cursor: pointer; position: absolute; bottom: 0; left: 0; height: 105px; width: 50px; background-color: #333; color: white; padding-top: 45px; text-align: center; font-weight: bold; font-size: 50px">
+      &lt;
+    </div>
+
+    <div id="thumb-scroll-right" style="cursor: pointer; position: absolute; bottom: 0; right: 0; height: 105px; width: 50px; background-color: #333; color: white; padding-top: 45px; text-align: center; font-weight: bold; font-size: 50px">
+      &gt;
+    </div>
+    <div id="thumbs" style="position: absolute; bottom: 0; left: 50px; width: calc(100% - 100px); height: 150px; background-color: #333; white-space: nowrap; overflow: hidden;">
+
+    </div>
+
+		<script type="text/javascript">
+
+    var urn = document.location.href.split("?urn=")[1].split("#")[0];
+		if (!urn) { urn = "file:///opt3/handschriften/jp2/20171026/KBHSS01000058925/access/424C19_01_01_8538.jp2"; }
+		$("#delph > canvas")
+			.attr("height",$("#delph").height())
+			.attr("width", $("#delph").width())
+			.imageViewerClient('http://imageviewer-iiif.kbresearch.nl/imagingService', {
+				params: {id: decodeURIComponent(urn)},
+				initialZoom: "scaleToFullHeight",
+				minScale: 0.0001,
+				previewScale: urn.match("ddd") ? 0.2 : 0.5,
+				allowYCentering: true,
+				userCallback: function () {
+					// [factor, commit, center, scalingTo, options]
+					if (urn.match("ddd")) {
+						$("#delph > canvas").trigger("scaleBy",  [0.0625, true, null, true]);
+					} else {
+						$("#delph > canvas").trigger("scaleBy",  [0.25, true, null, true]);
+					}
+
+				}
+			})
+			.imageViewerHandlers({mousewheel: true});
+/*
+<a style="display: inline-block; padding: 5px 5px 3px 5px; margin: 4px 0 0 0; background-color: #ddd">
+  <img src="http://imageviewer-iiif.kbresearch.nl/iiif-service/file%3A%2F%2F%2Fopt3%2Fhandschriften%2Fjp2%2F20171026%2FKBHSS01000058925%2Faccess%2F424C19_01_01_8531.jp2/full/,130/0/default.jpg" />
+</a>
+*/
+  function swapNodes(a, b) {
+      var aparent = a.parentNode;
+      var asibling = a.nextSibling === b ? a : a.nextSibling;
+      b.parentNode.insertBefore(a, b);
+      aparent.insertBefore(b, asibling);
+  }
+  $(document).ready(function() {
+    if (urn.match(/KBHSS01000058055/)) {
+      $("#scans-b").css("color", "#333");
+      swapNodes(document.getElementById("scans-a"), document.getElementById("scans-b"));
+    } else {
+      $("#scans-a").css("color", "#333");
+    }
+    var currentThumbs = urn.match(/KBHSS01000058055/) ? thumbs_KBHSS01000058055 : thumbs_KBHSS01000058925;
+    for(var i in currentThumbs) {
+      $("#thumbs")
+        .append($("<a>")
+          .attr("data-urn", currentThumbs[i].href)
+          .css("border", "1px solid " + (currentThumbs[i].href === urn ? "yellow" : "rgba(128,128,128,.4)"))
+          .css("margin-left", "6px")
+          .css("display", "inline-block")
+          .attr("href", "?urn=" + currentThumbs[i].href)
+        .append($("<img>").attr("src", currentThumbs[i].thumb)))
+        .on("mousewheel", function(ev, which) {
+          if (which < 0) {
+            $("#thumbs").scrollLeft($("#thumbs").scrollLeft() + 1);
+          } else {
+            $("#thumbs").scrollLeft($("#thumbs").scrollLeft() - 1);
+          }
+        });
+    }
+
+    $("#thumbs").scrollLeft($("#thumbs > a[data-urn='" + urn + "']")[0].offsetLeft - parseInt($(window).width() * 0.45) );
+
+
+    var scrollSpeed = 0;
+    var scrollDir = 0;
+    $("#thumb-scroll-right").on("mousedown", function() {
+      scrollDir = 1;
+    });
+
+    $("#thumb-scroll-left").on("mousedown", function() {
+      scrollDir = -1;
+    });
+    $(document).on("mouseup", function() { scrollDir = 0; scrollSpeed = 0});
+
+    window.setInterval(function() {
+      if (scrollDir !== 0) {
+        scrollSpeed += scrollDir;
+        if (scrollSpeed > 10) { scrollSpeed = 10; }
+        if (scrollSpeed < -10) { scrollSpeed = -10; }
+        $("#thumbs").scrollLeft($("#thumbs").scrollLeft() + scrollSpeed);
+      } else {
+        scrollSpeed = 0;
+      }
+
+    }, 10);
+  })
+
+		$(window).on("resize", function() {
+			$("#delph > canvas")
+				.attr("width", $("#delph").width())
+				.attr("height", $("#delph").height())
+				.trigger("recalibrate");
+		});
+
+		</script>
+	</body>
+</html>

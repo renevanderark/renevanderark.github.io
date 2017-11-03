@@ -21,5 +21,3 @@ var thumbs_KBHSS01000058055 = batch_KBHSS01000058055.sort(function(a, b) { retur
     href: loc_KBHSS01000058055  + fName
   };
 });
-
-console.log(thumbs_KBHSS01000058925);

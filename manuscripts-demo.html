@@ -15,6 +15,11 @@
 						padding: 0 10px 0 10px;
 					}
 
+          @media only screen and (max-width: 1024px) {
+            html, body {
+              font-size: 10px;
+            }
+          }
 	    </style>
 		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 				<script src="jquery.mousewheel.js"></script>
@@ -73,7 +78,8 @@
 
 				}
 			})
-			.imageViewerHandlers({mousewheel: true});
+			.imageViewerHandlers({mousewheel: true})
+      .imageviewerTouchHandlers({});
 /*
 <a style="display: inline-block; padding: 5px 5px 3px 5px; margin: 4px 0 0 0; background-color: #ddd">
   <img src="http://imageviewer-iiif.kbresearch.nl/iiif-service/file%3A%2F%2F%2Fopt3%2Fhandschriften%2Fjp2%2F20171026%2FKBHSS01000058925%2Faccess%2F424C19_01_01_8531.jp2/full/,130/0/default.jpg" />
@@ -116,14 +122,14 @@
 
     var scrollSpeed = 0;
     var scrollDir = 0;
-    $("#thumb-scroll-right").on("mousedown", function() {
+    $("#thumb-scroll-right").on("mousedown touchstart", function() {
       scrollDir = 1;
     });
 
-    $("#thumb-scroll-left").on("mousedown", function() {
+    $("#thumb-scroll-left").on("mousedown touchstart", function() {
       scrollDir = -1;
     });
-    $(document).on("mouseup", function() { scrollDir = 0; scrollSpeed = 0});
+    $(document).on("mouseup touchend", function() { scrollDir = 0; scrollSpeed = 0});
 
     window.setInterval(function() {
       if (scrollDir !== 0) {
